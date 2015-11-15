@@ -1,0 +1,22 @@
+@startuml
+actor NeilAndRichie
+actor Audience
+
+NeilAndRichie -> Live: Demo application
+Audience -> Live: Click button
+Live -> Prometheus: Send metrics
+Prometheus -> Grafana: Visualise usage
+
+NeilAndRichie -> Github: Commit new button code
+Github <-> CI: Watches
+CI -> CI: Builds Artefact v2
+CI -> Live: Deploy Artefact v2
+Audience -> Live: Clicks button
+Live -> Live: Generate Errors
+Live -> Prometheus: Send metrics
+Grafana <-> Prometheus: Visualise errors
+Prometheus -> CI: Alerts rollback
+CI -> Live: Deploy Artefact v1
+Audience -> Audience: Isn't that amazing
+
+@enduml
