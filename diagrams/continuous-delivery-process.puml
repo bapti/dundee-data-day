@@ -1,0 +1,12 @@
+@startuml
+actor Dev
+
+Dev -> Github: Commit code
+Github <- CI: watches
+CI -> CI: Builds container
+CI -> "Container Hub": publish container
+CI -> EC2: signal to update
+EC2 <- "Container Hub": pull container
+EC2 -> EC2: Deploy container
+
+@enduml
