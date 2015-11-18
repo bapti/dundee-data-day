@@ -1,18 +1,25 @@
+var path = require('path');
 var express = require('express');
+var webpack = require('webpack');
+var config = require('./webpack-config');
+
 var app = express();
-var io = require('socket.io')(app);
+var compiler = webpack(config);
 
-app.get('/', function (req, res) {
-  res.send('Hello World!');
+app.use(require('webpack-dev-middleware')(compiler, {
+  noInfo: true,
+  publicPath: config.output.publicPath
+}));
+
+app.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-var server = app.listen(3000, function () {
-  console.log('Example app listening at port 3000');
-});
+app.listen(3000, 'localhost', function(err) {
+  if (err) {
+    console.log(err);
+    return;
+  }
 
-io.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
+  console.log('Listening at http://localhost:3000');
 });
