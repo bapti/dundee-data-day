@@ -15,11 +15,26 @@ app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.listen(3000, function(err) {
+var server = app.listen(3000, function(err) {
   if (err) {
     console.log(err);
     return;
   }
 
   console.log('Listening at http://localhost:3000');
+});
+
+var io = require('socket.io')(server)
+
+var count = 0
+
+io.on('connection', function (socket) {
+  socket.emit('count', { count: count });
+
+  socket.on('increment', function (data) {
+    count++
+    console.log("increment count: " + count);
+    socket.emit('count', { count: count });
+    socket.broadcast.emit('count', { count: count });
+  });
 });

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { NICE, SUPER_NICE } from './colors';
+import io from 'socket.io-client'
+
+let socket = io.connect('http://localhost:3000');
 
 class Counter extends Component {
   constructor(props) {
@@ -27,12 +29,43 @@ class Counter extends Component {
   }
 }
 
+class CounterButton extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+    let self = this
+
+    socket.on('count', function(data){
+      console.log(data);
+      self.setState({ count: data.count })
+    })
+  }
+
+  getInitialState() {
+    return {count: 0};
+  }
+
+  handleClick() {
+    socket.emit('increment')
+    console.log(this.state.count);
+  }
+
+  render() {
+    return (
+      <button onClick={this.handleClick} style={{ color: this.props.color }}>
+        Count: {this.state.count}
+      </button>
+    );
+  }
+}
+
 export class App extends Component {
   render() {
     return (
       <div>
-        <Counter increment={1} color={NICE} />
-        <Counter increment={5} color={SUPER_NICE} />
+        <Counter increment={1} color={'pink'} />
+        <Counter increment={5} color={'blue'} />
+        <CounterButton increment={1} color={'red'} />
       </div>
     );
   }
