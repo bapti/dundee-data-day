@@ -1,40 +1,55 @@
-var path = require('path');
-var express = require('express');
-var webpack = require('webpack');
-var config = require('./webpack-config');
+(function () {
+    'use strict';
 
-var app = express();
-var compiler = webpack(config);
+    var path = require('path'),
+        express = require('express'),
+        webpack = require('webpack'),
+        config = require('./webpack-config'),
+        Prometheus = require("prometheus-client"),
 
-app.use(require('webpack-dev-middleware')(compiler, {
-  noInfo: true,
-  publicPath: config.output.publicPath
-}));
+        app = express(),
+        compiler = webpack(config),
+        client = new Prometheus(),
 
-app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
+        counter = client.newCounter({
+            namespace: "dundee-data-day",
+            name: "button-counter",
+            help: "The number of times the button has been clicked"
+        });
 
-var server = app.listen(3000, function(err) {
-  if (err) {
-    console.log(err);
-    return;
-  }
+    app.use(require('webpack-dev-middleware')(compiler, {
+        noInfo: true,
+        publicPath: config.output.publicPath
+    }));
 
-  console.log('Listening at http://localhost:3000');
-});
+    app.get('/', function (req, res) {
+        res.sendFile(path.join(__dirname, 'index.html'));
+    });
 
-var io = require('socket.io')(server)
+    app.get("/metrics", client.metricsFunc());
 
-var count = 0
+    var server = app.listen(3000, function (err) {
+        if (err) {
+            console.log(err);
+            return;
+        }
 
-io.on('connection', function (socket) {
-  socket.emit('count', { count: count });
+        console.log('Listening at http://localhost:3000');
+    });
 
-  socket.on('increment', function (data) {
-    count++
-    console.log("increment count: " + count);
-    socket.emit('count', { count: count });
-    socket.broadcast.emit('count', { count: count });
-  });
-});
+    var io = require('socket.io')(server);
+
+    var count = 0;
+
+    io.on('connection', function (socket) {
+        socket.emit('count', {count: count});
+
+        socket.on('increment', function (data) {
+            count++;
+            console.log("increment count: " + count);
+            socket.emit('count', {count: count});
+            socket.broadcast.emit('count', {count: count});
+            counter.increment({version: '1.0'});
+        });
+    });
+})();

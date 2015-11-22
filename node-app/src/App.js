@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import io from 'socket.io-client'
+import io from 'socket.io-client';
 
 let socket = io.connect('http://localhost:3000');
 
@@ -46,7 +46,7 @@ class CounterButton extends Component {
   }
 
   handleClick() {
-    socket.emit('increment')
+    socket.emit('increment');
     console.log(this.state.count);
   }
 
