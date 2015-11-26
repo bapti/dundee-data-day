@@ -72,9 +72,9 @@ sqlite3:
     - "/tmp/prom:/tmp/prom"
 
 
-# web:
-#   build: "."
-#   expose:
-#     - "5000"
-#   ports:
-#     - "5000:5000"
+web:
+  build: "node-app/"
+  expose:
+    - "5000"
+  ports:
+    - "5000:5000"

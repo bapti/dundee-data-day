@@ -28,13 +28,13 @@
 
     app.get("/metrics", client.metricsFunc());
 
-    var server = app.listen(3000, function (err) {
+    var server = app.listen(5000, function (err) {
         if (err) {
             console.log(err);
             return;
         }
 
-        console.log('Listening at http://localhost:3000');
+        console.log('Listening at http://localhost:5000');
     });
 
     var io = require('socket.io')(server);
