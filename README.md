@@ -1,4 +1,9 @@
+#### Docker environment 
 
+```sh
+# this should print out the details required to get the shell prompt talking to docker
+docker-machine env default --shell=cmd
+```
 
 #### Running node locally
 
