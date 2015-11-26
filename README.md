@@ -3,6 +3,9 @@
 ```sh
 # this should print out the details required to get the shell prompt talking to docker
 docker-machine env default --shell=cmd
+
+# this is the direct command
+FOR /f "tokens=*" %i IN ('docker-machine env default --shell=cmd') DO %i
 ```
 
 #### Running node locally
