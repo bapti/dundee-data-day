@@ -44,7 +44,7 @@
     io.on('connection', function (socket) {
         socket.emit('count', {count: count});
 
-        socket.on('increment', function (data) {
+        socket.on('increment', function () {
             count++;
             console.log("increment count: " + count);
             socket.emit('count', {count: count});
