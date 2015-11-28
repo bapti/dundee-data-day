@@ -57,7 +57,7 @@ prometheus:
   links:
     - "exporter:export"
     - "cadvisor:cadvisor"
-    # - "web:web"
+    - "web:web"
   ports:
     - "9090:9090"
 
@@ -73,7 +73,7 @@ sqlite3:
 
 
 web:
-  image: "cizer/dundee-data-day"
+  image: "cizer/dundee-data-day:0.1.7"
   expose:
     - "5000"
   ports:
