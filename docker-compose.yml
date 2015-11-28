@@ -52,7 +52,7 @@ prometheus:
   build: prom/
   labels:
     - name=prometheus
-    - "description=Core of Promethues"
+    - "description=Core of Prometheus"
     - version=0.16.1
   links:
     - "exporter:export"
@@ -73,7 +73,7 @@ sqlite3:
 
 
 web:
-  image: "cizer/dundee-data-day:0.1.7"
+  image: "cizer/dundee-data-day:0.1.10"
   expose:
     - "5000"
   ports:

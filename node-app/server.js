@@ -12,8 +12,8 @@
         client = new Prometheus(),
 
         counter = client.newCounter({
-            namespace: "dundee-data-day",
-            name: "button-counter",
+            namespace: "dundee_data_day",
+            name: "button_counter",
             help: "The number of times the button has been clicked"
         });
 
