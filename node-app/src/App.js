@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 
-let socket = io.connect('http://192.168.99.100:5000');
+let socket = io.connect(window.location.href);
 
 class Counter extends Component {
   constructor(props) {
@@ -47,7 +47,7 @@ class CounterButton extends Component {
 
   handleClick() {
     socket.emit('increment');
-    console.log(this.state.count);
+    //console.log(this.state.count);
   }
 
   render() {
