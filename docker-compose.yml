@@ -46,6 +46,17 @@ promdash:
     - "3000:3000"
   volumes:
     - "/tmp/prom:/tmp/prom"
+  links:
+    - "prometheus:prometheus"
+
+grafana:
+  expose:
+    - "4000"
+  image: grafana/grafana
+  ports:
+    - "4000:3000"
+  links:
+    - "prometheus:prometheus"
 
 
 prometheus:
