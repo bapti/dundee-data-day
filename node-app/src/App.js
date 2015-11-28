@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
 
-let socket = io.connect('http://localhost:3000');
+let socket = io.connect('http://localhost:5000');
 
 class Counter extends Component {
   constructor(props) {
