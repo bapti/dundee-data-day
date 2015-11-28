@@ -1,0 +1,21 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker info
+    - docker build -t dundee-data-day ./node-app
+
+test:
+  override:
+    - docker run -d -p 5000:5000 dundee-data-day; sleep 10
+    - curl --retry 10 --retry-delay 5 -v http://localhost:5000
+
+deployment:
+  hub:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag dundee-data-day:latest cizer/dundee-data-day:$VERSION_NUM.$CIRCLE_BUILD_NUM
+      - docker push cizer/dundee-data-day:$VERSION_NUM.$CIRCLE_BUILD_NUM
