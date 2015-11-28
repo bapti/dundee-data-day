@@ -73,7 +73,7 @@ sqlite3:
 
 
 web:
-  build: "node-app/"
+  image: "cizer/dundee-data-day"
   expose:
     - "5000"
   ports:
