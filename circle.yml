@@ -17,5 +17,5 @@ deployment:
     branch: master
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker tag dundee-data-day:latest cizer/dundee-data-day:$CIRCLE_BUILD_NUM
-      - docker push cizer/dundee-data-day:$CIRCLE_BUILD_NUM
+      - docker tag dundee-data-day:latest cizer/dundee-data-day:$VERSION_NUM.$CIRCLE_BUILD_NUM
+      - docker push cizer/dundee-data-day:$VERSION_NUM.$CIRCLE_BUILD_NUM
