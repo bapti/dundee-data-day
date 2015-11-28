@@ -55,4 +55,4 @@ Prometheus server => http://docker-host:9090/
 
 #### Prometheus server
 
-When you go to PromDash add a server with the exact url http://prometheus:9090/ - this will allow promdash to be able to see the prometheus scraper
+When you go to PromDash add a server with the exact url http://192.168.99.100:9090/ - this will allow promdash to be able to see the prometheus scraper
