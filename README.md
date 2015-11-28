@@ -1,4 +1,4 @@
-#### Docker environment 
+#### Docker environment
 
 ```sh
 # this should print out the details required to get the shell prompt talking to docker
@@ -52,3 +52,7 @@ docker-compose start
 Prom dash => http://docker-host:3000/
 Prometheus server => http://docker-host:9090/
 ```
+
+#### Prometheus server
+
+When you go to PromDash add a server with the exact url http://prometheus:9090/ - this will allow promdash to be able to see the prometheus scraper
