@@ -84,7 +84,7 @@ sqlite3:
 
 
 web:
-  image: "cizer/dundee-data-day:0.1.10"
+  image: "cizer/dundee-data-day"
   expose:
     - "5000"
   ports:
