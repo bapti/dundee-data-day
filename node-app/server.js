@@ -44,12 +44,12 @@
     io.on('connection', function (socket) {
         socket.emit('count', {count: count});
 
-        socket.on('increment', function () {
+        socket.on('increment', function (version) {
             count++;
-            console.log("increment count: " + count);
+            console.log("increment count: " + count, version);
             socket.emit('count', {count: count});
             socket.broadcast.emit('count', {count: count});
-            counter.increment({version: '1.0'});
+            counter.increment({version: version});
         });
     });
 })();

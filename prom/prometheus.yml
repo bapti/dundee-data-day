@@ -12,6 +12,7 @@ global:
 
 # Load and evaluate rules in this file every 'evaluation_interval' seconds.
 rule_files:
+  - '/etc/prometheus/alert.rules'
   # - "first.rules"
   # - "second.rules"
 

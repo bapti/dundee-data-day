@@ -69,6 +69,7 @@ prometheus:
     - "exporter:export"
     - "cadvisor:cadvisor"
     - "web:web"
+    - "alertmanager:alertmanager"
   ports:
     - "9090:9090"
 
@@ -89,3 +90,8 @@ web:
     - "5000"
   ports:
     - "5000:5000"
+
+alertmanager:
+  build: alertmanager/
+  ports:
+    - "9093:9093"
