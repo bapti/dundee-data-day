@@ -28,6 +28,11 @@
 
     app.get("/metrics", client.metricsFunc());
 
+    app.post("/rollback", function(data){
+        console.log("triggering rollback", data);
+        socket.emit('rollback', data);
+    });
+
     var server = app.listen(5000, function (err) {
         if (err) {
             console.log(err);
