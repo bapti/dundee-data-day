@@ -35,7 +35,7 @@
 
     app.get("/metrics", client.metricsFunc());
 
-    app.post("/rollback", function(data){
+    app.post("/disable_feature", function(data){
         console.log("triggering rollback", data);
         socket.emit('rollback', data);
     });
