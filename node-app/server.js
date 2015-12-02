@@ -12,10 +12,17 @@
         client = new Prometheus(),
 
         counter = client.newCounter({
-            namespace: "dundee_data_day",
-            name: "button_counter",
-            help: "The number of times the button has been clicked"
-        });
+          namespace: "dundee_data_day",
+          name: "button_counter",
+          help: "The number of times the button has been clicked"
+        }),
+
+        errorCounter = client.newCounter({
+          namespace: "dundee_data_day",
+          name: "error_counter",
+          help: "The number of errors thrown"
+        })
+
 
     app.use(require('webpack-dev-middleware')(compiler, {
         noInfo: true,
