@@ -51,10 +51,12 @@ class Toggler extends Component {
         let applyFeatureState = (feature) => {
             if (self.props.feature === feature.feature &&
                 self.props.version === feature.version) {
+                console.log("before:state value", self.state, feature.version);
                 self.setState( {
-                  enabled: feature.state
+                  enabled: feature.enabled
                 })
-                console.log("state value", self.state);
+
+                console.log("after:state value", self.state, feature.version);
             }
         }
 
@@ -67,6 +69,8 @@ class Toggler extends Component {
         let togglerStyle = {
             display: this.state.enabled ? 'block' : 'none'
         };
+
+        console.log(this.props.version, togglerStyle);
         return (
             <div style={togglerStyle}>
                 {this.props.children}
