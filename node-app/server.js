@@ -3,6 +3,8 @@ var path = require('path'),
     webpack = require('webpack'),
     config = require('./webpack-config'),
     Prometheus = require("prometheus-client"),
+    bodyParser = require('body-parser'),
+    jsonParser = bodyParser.json(),
 
     app = express(),
     compiler = webpack(config),
@@ -18,7 +20,8 @@ var path = require('path'),
       namespace: "dundee_data_day",
       name: "error_counter",
       help: "The number of errors thrown"
-    })
+    }),
+    io;
 
 
 app.use(require('webpack-dev-middleware')(compiler, {
@@ -32,6 +35,12 @@ app.get('/', function (req, res) {
 
 app.get("/metrics", client.metricsFunc());
 
+app.post("/feature", jsonParser, function(request, response){
+    console.log("HITTING disable_feature", request.body);
+    io.emit("disable_feature", request.body);
+    response.end(request.body);
+})
+
 var server = app.listen(5000, function (err) {
     if (err) {
         console.log(err);
@@ -41,7 +50,7 @@ var server = app.listen(5000, function (err) {
     console.log('Listening at http://localhost:5000');
 });
 
-var io = require('socket.io')(server);
+io = require('socket.io')(server);
 
 var count = 0;
 
