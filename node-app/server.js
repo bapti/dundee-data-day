@@ -60,7 +60,6 @@ io.on('connection', function (socket) {
     socket.on('increment', function (data) {
         count++;
         console.log("increment count: " + count, data.version);
-        socket.emit('count', {count: count});
         socket.broadcast.emit('count', {count: count});
 
         if( data.version == 1 ){

@@ -6,26 +6,26 @@ let socket = io.connect(window.location.href);
 class CounterButton extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+          count: 0
+        }
         this.handleClick = this.handleClick.bind(this)
-        this.state = {count: 0};
-        let self = this;
 
+        let self = this;
         socket.on('count', function (data) {
-            console.log(data);
             self.setState(data);
         });
     }
 
-    getInitialState() {
-        return {count: 0};
-    }
-
     handleClick() {
         socket.emit('increment', {version: this.props.version});
+        this.setState({
+          count: this.state.count + 1
+        })
     }
 
     render() {
-        var buttonStyle = {
+        let buttonStyle = {
             color: this.props.color,
             "font-size": "xx-large",
             cursor: "pointer"
@@ -43,32 +43,30 @@ class Toggler extends Component {
     constructor(props) {
         super(props);
         let self = this;
-        socket.on('disable_feature', function (featureData) {
-            //console.log("disable_feature TRIGGERED", self.props)
-            featureData.forEach(applyFeatureState);
-        })
 
-        function applyFeatureState(feature){
-            //console.log(feature)
+        this.state = {
+          enabled: this.props.enabled
+        }
+
+        let applyFeatureState = (feature) => {
             if (self.props.feature === feature.feature &&
                 self.props.version === feature.version) {
-                //console.log("setting state ", feature, feature.state);
-                self.setState({enabled: feature.state})
-                console.log("state value", self.props.state);
+                self.setState( {
+                  enabled: feature.state
+                })
+                console.log("state value", self.state);
             }
         }
-    }
 
-    getInitialState() {
-        return {enabled: this.props.enabled};
+        socket.on('disable_feature', function (featureData) {
+            featureData.forEach(applyFeatureState);
+        })
     }
 
     render() {
-        var togglerStyle = {
-            display: this.props.enabled ? 'block' : 'none'
+        let togglerStyle = {
+            display: this.state.enabled ? 'block' : 'none'
         };
-        console.log("togglerStyle", togglerStyle, this.props)
-
         return (
             <div style={togglerStyle}>
                 {this.props.children}
