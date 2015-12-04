@@ -36,9 +36,12 @@ app.get('/', function (req, res) {
 app.get("/metrics", client.metricsFunc());
 
 app.post("/feature", jsonParser, function(request, response){
-    console.log("HITTING disable_feature", request.body);
-    io.emit("disable_feature", request.body);
-    response.write(request.body);
+    console.log("HITTING /feature", request.body);
+    featureState = request.body;
+    if(request.body.alert){
+        console.log(request.body.alert[0].payload);
+    }
+    io.emit("set_feature_state", request.body);
     response.end();
 })
 
@@ -53,15 +56,17 @@ var server = app.listen(5000, function (err) {
 
 io = require('socket.io')(server);
 
-var count = 0;
+var count = 0,
+    featureState = [];
 
 io.on('connection', function (socket) {
     socket.emit('count', { count: count } );
+    socket.emit("set_feature_state", featureState);
 
     socket.on('increment', function (data) {
         count++;
         console.log("increment count: " + count, data.version);
-        socket.broadcast.emit('count', {count: count});
+        io.emit('count', {count: count});
 
         if( data.version == 1 ){
           counter.increment()

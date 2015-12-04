@@ -13,15 +13,13 @@ class CounterButton extends Component {
 
         let self = this;
         socket.on('count', function (data) {
+            console.log('on count', data);
             self.setState(data);
         });
     }
 
     handleClick() {
         socket.emit('increment', {version: this.props.version});
-        this.setState({
-          count: this.state.count + 1
-        })
     }
 
     render() {
@@ -60,7 +58,7 @@ class Toggler extends Component {
             }
         }
 
-        socket.on('disable_feature', function (featureData) {
+        socket.on('set_feature_state', function (featureData) {
             featureData.forEach(applyFeatureState);
         })
     }
@@ -82,7 +80,7 @@ class Toggler extends Component {
 export class App extends Component {
     render() {
         return (
-            <center height="100%">
+            <center>
                 <div>
 
                     <Toggler feature='counter_button' version='1' enabled={true}>
