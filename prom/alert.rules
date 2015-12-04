@@ -4,15 +4,3 @@ ALERT sample_reached
   FOR 1m
   SUMMARY "High request latency on {{$labels.instance}}"
   DESCRIPTION "{{$labels.instance}} has a median request latency above 1s (current value: {{$value}})"
-  PAYLOAD [
-             {
-                "enabled":true,
-                "feature":"counter_button",
-                "version":"1"
-             },
-             {
-                "enabled":false,
-                "feature":"counter_button",
-                "version":"2"
-             }
-          ]
