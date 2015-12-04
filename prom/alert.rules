@@ -1,6 +1,18 @@
 # Alert for any instance that is unreachable for >5 minutes.
 ALERT sample_reached
-  IF dundee_data_day_button_counter{version="2"} > 20
+  IF dundee_data_day_error_counter{version="2"} > 20
   FOR 1m
   SUMMARY "High request latency on {{$labels.instance}}"
   DESCRIPTION "{{$labels.instance}} has a median request latency above 1s (current value: {{$value}})"
+  PAYLOAD [
+             {
+                "enabled":true,
+                "feature":"counter_button",
+                "version":"1"
+             },
+             {
+                "enabled":false,
+                "feature":"counter_button",
+                "version":"2"
+             }
+          ]
