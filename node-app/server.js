@@ -37,7 +37,6 @@ app.get("/metrics", client.metricsFunc());
 
 app.post("/feature", jsonParser, function(request, response){
     console.log("HITTING disable_feature", request.body);
-    console.log("PAYLOAD", request.body.alert[0].payload);
     io.emit("disable_feature", request.body.alert[0].payload);
     response.write(request.body);
     response.end();
