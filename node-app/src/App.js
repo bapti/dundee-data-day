@@ -7,7 +7,7 @@ class CounterButton extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          count: 0
+            count: 0
         }
         this.handleClick = this.handleClick.bind(this)
 
@@ -24,7 +24,10 @@ class CounterButton extends Component {
 
     render() {
         let buttonStyle = {
-            color: this.props.color,
+            width: "500px",
+            height: "250px",
+            "background-color": this.props.color,
+            color: "white",
             "font-size": "xx-large",
             cursor: "pointer"
         };
@@ -43,15 +46,15 @@ class Toggler extends Component {
         let self = this;
 
         this.state = {
-          enabled: this.props.enabled
+            enabled: this.props.enabled
         }
 
         let applyFeatureState = (feature) => {
             if (self.props.feature === feature.feature &&
                 self.props.version === feature.version) {
                 console.log("before:state value", self.state, feature.version);
-                self.setState( {
-                  enabled: feature.enabled
+                self.setState({
+                    enabled: feature.enabled
                 })
                 console.log("after:state value", self.state, feature.version);
             }
@@ -83,11 +86,11 @@ export class App extends Component {
                 <div>
 
                     <Toggler feature='counter_button' version='1' enabled={true}>
-                        <CounterButton color={'red'} version='1'/>
+                        <CounterButton color={'green'} version='1'/>
                     </Toggler>
 
                     <Toggler feature='counter_button' version='2' enabled={false}>
-                        <CounterButton color={'green'} version='2'/>
+                        <CounterButton color={'red'} version='2'/>
                     </Toggler>
 
                 </div>
