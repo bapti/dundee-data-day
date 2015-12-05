@@ -10,16 +10,16 @@ var path = require('path'),
     compiler = webpack(config),
     client = new Prometheus(),
 
-    counter = client.newCounter({
-      namespace: "dundee_data_day",
-      name: "button_counter",
-      help: "The number of times the button has been clicked"
+    featureCounter = client.newCounter({
+        namespace: "dundee_data_day",
+        name: "feature_counter",
+        help: "This counter increments every times a feature is invoked on the page."
     }),
 
-    errorCounter = client.newCounter({
-      namespace: "dundee_data_day",
-      name: "error_counter",
-      help: "The number of errors thrown"
+    connectionCounter = client.newCounter({
+        namespace: "dundee_data_day",
+        name: "connection_counter",
+        help: "This counter increments every time a socket event or endpoint is hit."
     }),
     io;
 
@@ -30,20 +30,23 @@ app.use(require('webpack-dev-middleware')(compiler, {
 }));
 
 app.get('/', function (req, res) {
+    connectionCounter.increment({type:"api", endpoint: "/"});
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get("/metrics", client.metricsFunc());
 
-app.post("/feature", jsonParser, function(request, response){
+app.post("/feature", jsonParser, function (request, response) {
     console.log("HITTING /feature", request.body);
+
+    connectionCounter.increment({type:"api",endpoint: "/feature"});
     featureState = request.body;
-    if(request.body.alert){
+    if (request.body.alert) {
         console.log(request.body.alert[0].payload);
     }
     io.emit("set_feature_state", request.body);
     response.end();
-})
+});
 
 var server = app.listen(5000, function (err) {
     if (err) {
@@ -60,7 +63,9 @@ var count = 0,
     featureState = [];
 
 io.on('connection', function (socket) {
-    socket.emit('count', { count: count } );
+
+    connectionCounter.increment({type:"socket",endpoint: "connection"});
+    socket.emit('count', {count: count});
     socket.emit("set_feature_state", featureState);
 
     socket.on('increment', function (data) {
@@ -68,12 +73,20 @@ io.on('connection', function (socket) {
         console.log("increment count: " + count, data.version);
         io.emit('count', {count: count});
 
-        if( data.version == 1 ){
-          counter.increment()
+        if (data.version == 1) {
+            featureCounter.increment({feature: "counter_button", version: 1, code: "OK"});
         }
 
-        if( data.version == 2 && count % 5 == 0 ) {
-          errorCounter.increment({feature: "counter_button", version: 2})
+        if (data.version == 2) {
+            if (count % 5 === 0) {
+                featureCounter.increment({feature: "counter_button", version: 2, code: "ERROR"});
+            } else {
+                featureCounter.increment({feature: "counter_button", version: 2, code: "OK"});
+            }
         }
+
+        connectionCounter.increment({type:"socket",endpoint: "increment"});
     });
 });
+
+

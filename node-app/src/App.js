@@ -53,7 +53,6 @@ class Toggler extends Component {
                 self.setState( {
                   enabled: feature.enabled
                 })
-
                 console.log("after:state value", self.state, feature.version);
             }
         }

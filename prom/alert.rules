@@ -1,24 +1,6 @@
-notification_config {
-  name: "alertmanager_slack"
-  slack_config {
-    webhook_url: "https://hooks.slack.com/services/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"
-    channel: "#alerts"
-  }
-}
-
-aggregation_rule {
-  repeat_rate_seconds: 60
-  notification_config_name: "alertmanager_slack"
-}
-
-notification_config {
-  name: "alertmanager_webhook"
-  webhook_config {
-    url: "http://ddd.ngrok.io/feature"
-  }
-}
-
-aggregation_rule {
-  repeat_rate_seconds: 60
-  notification_config_name: "alertmanager_webhook"
-}
+# Alert for any instance that is unreachable for >5 minutes.
+ALERT sample_reached
+  IF dundee_data_day_feature_counter{version="2", code="ERROR"} > 20
+  FOR 1m
+  SUMMARY "High occurrence of unexpected errors {{$labels.instance}}"
+  DESCRIPTION "{{$labels.instance}} has too many issues and threshold is reached (current value: {{$value}}) ... rolling back feature"
